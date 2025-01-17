@@ -34,6 +34,11 @@ nav {
     padding: 2px;
     box-shadow: 0 0 30px gray;
   }
+  footer {
+    margin-top: 20px;
+    border-top: 2px solid #ccc;
+    text-align: center;
+}
   p {
     padding: 0px;
   }
