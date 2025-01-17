@@ -1,3 +1,15 @@
+main {
+    width: 80%;
+    margin: 0 auto;
+}
+aside {
+    width: 300px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    color: #333;
+}
 nav {
     background-color: darkblue;
     padding: 10px;
@@ -10,6 +22,11 @@ nav {
   h1 {
     color: darkblue;
   }
+
+  main img {
+    width: 150px;
+    height: auto;
+}
   img {
     width: 150px;
     height: auto;
@@ -21,3 +38,7 @@ nav {
     padding: 10px;
   }
   
+  aside img {
+    width: 200px;
+    height: auto;
+}
