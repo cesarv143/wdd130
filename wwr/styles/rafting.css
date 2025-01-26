@@ -30,21 +30,27 @@ header img {
 
 header nav a {
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
     margin-right: 1em;
     font-size: 1.2em;
 }
 
 header nav a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .hero {
     height: 100vh;
-    background-image: url('../images/heroima.jpg');
+    background-image: url('../images/hero-image.jpg');
     background-size: cover;
     background-position: center;
     position: relative;
+}
+
+.hero img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .hero h1 {
@@ -86,6 +92,13 @@ section {
 section h2 {
     font-family: 'Merriweather', serif;
     color: var(--primary-color);
+}
+
+section img {
+    display: inline-block;
+    width: 18%;
+    margin: 1%;
+    height: auto;
 }
 
 footer {
