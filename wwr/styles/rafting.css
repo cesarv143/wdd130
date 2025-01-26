@@ -1,0 +1,114 @@
+:root {
+    --primary-color: #007acc;
+    --secondary-color: #004c99;
+    --accent-color: #ffcc00;
+    --text-color: #333;
+    --background-color: #f9f9f9;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+header img {
+    height: 50px;
+    margin-right: 1em;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 1em;
+    font-size: 1.2em;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+.hero {
+    height: 100vh;
+    background-image: url('../images/heroima.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero h1 {
+    color: white;
+    font-size: 3em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 20%;
+    left: 5%;
+}
+
+article {
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 500px;
+}
+
+article img {
+    float: right;
+    margin-left: 1em;
+    max-width: 150px;
+    height: auto;
+}
+
+article p {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+section {
+    margin: 2em 0;
+    padding: 1em;
+}
+
+section h2 {
+    font-family: 'Merriweather', serif;
+    color: var(--primary-color);
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    margin: 0 0.5em;
+    display: inline-block;
+}
+
+footer img {
+    width: 24px;
+    height: 24px;
+}
+
+footer a img {
+    text-decoration: none;
+}
