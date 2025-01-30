@@ -100,3 +100,20 @@ footer {
   padding: 0;
   box-sizing: border-box;
 }
+
+aside {
+  position: relative; 
+  width: 300px;
+  background-color: #f4f4f4;
+  padding: 40px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+aside h3 {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 1.5em;
+  color: darkblue;
+}
