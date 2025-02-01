@@ -49,6 +49,15 @@ header {
   align-items: center;
 }                            
 
+nav {
+  display: flex; 
+  
+  padding: 10px;
+
+}
+
+
+
 nav a {
   color: rgb(131, 20, 20);
   text-decoration: none;
@@ -58,6 +67,7 @@ nav a {
   display: block;
   text-align: center;
   font-weight: 700;
+  
 }
 
 section {
