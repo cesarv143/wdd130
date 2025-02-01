@@ -42,7 +42,7 @@ margin: .5rem;
 header {
   background-color: var(--primary-color);
   color: rgb(156, 25, 25);
-  display: grid;
+  display: flex;
   grid-auto-columns: 280px 1fr;
   justify-content: space-between;
   padding: 15px;
