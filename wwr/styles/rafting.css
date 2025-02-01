@@ -97,9 +97,9 @@ p {
 }
 
 section {
-	width: 75vw;
+	width: 90vw;
 	margin: 1rem auto;
-	background-color: #eee;
+	background-color: #eee  ;
 	padding: 1rem;
 	border: 1px solid rgb(0 0 0 / .1);
 }
@@ -123,20 +123,20 @@ footer {
 
 section.adventure {
   display: flex;
-  flex-wrap: wrap; /* Permite que bajen de línea si no caben */
-  gap: 15px; /* Espaciado entre imágenes */
-  justify-content: center; /* Centra las imágenes en la página */
+  flex-wrap: wrap; /* Allow them to go down the line if they don't fit */
+  gap: 25px; /* Space between images */
+  justify-content: center; 
   align-items: flex-start;
 }
 
 section.adventure figure {
-  text-align: center; /* Centra el texto de las imágenes */
-  width: 200px; /* Ajusta el ancho de cada figura */
+  text-align: center; 
+  width: 200px; 
 }
 
 section.adventure img {
-  width: 100%; /* Hace que todas las imágenes sean del mismo tamaño */
-  border-radius: 5px; /* Opcional: Bordes redondeados */
+  width: 100%; 
+  border-radius: 5px; 
 }
 
 
