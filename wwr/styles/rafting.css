@@ -121,6 +121,23 @@ footer {
 	
 }
 
+section.adventure {
+  display: flex;
+  flex-wrap: wrap; /* Permite que bajen de línea si no caben */
+  gap: 15px; /* Espaciado entre imágenes */
+  justify-content: center; /* Centra las imágenes en la página */
+  align-items: flex-start;
+}
+
+section.adventure figure {
+  text-align: center; /* Centra el texto de las imágenes */
+  width: 200px; /* Ajusta el ancho de cada figura */
+}
+
+section.adventure img {
+  width: 100%; /* Hace que todas las imágenes sean del mismo tamaño */
+  border-radius: 5px; /* Opcional: Bordes redondeados */
+}
 
 
 * {
@@ -138,10 +155,21 @@ aside {
   border-radius: 5px;
 }
 
+.adventure {
+  text-align: center;
+}
+
+.adventure h2 {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+
 aside h3 {
   position: absolute;
   top: 10px;
   left: 20px;
   font-size: 1.5em;
-  color: darkblue;
+  color: rgb(2, 2, 143);
 }
+
