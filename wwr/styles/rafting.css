@@ -173,3 +173,33 @@ aside h3 {
   color: rgb(2, 2, 143);
 }
 
+.sociallinks {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Opcional: espacio entre íconos */
+  grid-template-columns: 180px 1fr;
+  
+}
+
+
+/* Estilos para el título History */
+section.history h2 {
+  text-align: center;
+  margin-bottom: 20px; /* Espacio entre el título y el contenido */
+}
+
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sociallinks {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sociallinks a {
+  margin-left: 10px; 
+}
