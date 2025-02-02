@@ -188,6 +188,50 @@ section.history h2 {
   margin-bottom: 20px; /* Espacio entre el título y el contenido */
 }
 
+/* Estilos generales para la sección history */
+section.history {
+  text-align: center;
+  padding: 20px;
+}
+
+section.history h2 {
+  margin-bottom: 20px; /* Espacio entre el título y el contenido */
+}
+
+/* Contenedor para distribuir el contenido en 3 columnas */
+.history-content {
+  display: flex;
+  justify-content: center;   /* Centra el conjunto de elementos horizontalmente */
+  align-items: center;       /* Alinea verticalmente todos los elementos */
+  gap: 20px;                 /* Espacio entre columnas */
+}
+
+/* Estilos para los párrafos a la izquierda y derecha */
+.history-content .left-text,
+.history-content .right-text {
+  flex: flex;                   /* Permite que ocupen el espacio disponible */
+  text-align: justify;       /* Opcional: justifica el texto */
+  margin: 0 10px;
+}
+
+/* Estilos para la imagen */
+.history-content img {
+  flex: 0 0 auto;           /* No se expande la imagen */
+  width: 250px;             /* Ajusta el ancho de la imagen según se requiera */
+  height: auto;             /* Mantiene la proporción de la imagen */
+  border: 1px solid #ccc;   /* Opcional: borde para darle definición */
+  border-radius: 5px;       /* Opcional: esquinas redondeadas */
+}
+
+
+
+
+
+
+
+
+
+
 
 footer {
   display: flex;
