@@ -209,7 +209,6 @@ section.history h2 {
 /* Estilos para los párrafos a la izquierda y derecha */
 .history-content .left-text,
 .history-content .right-text {
-  flex: flex;                   /* Permite que ocupen el espacio disponible */
   text-align: justify;       /* Opcional: justifica el texto */
   margin: 0 10px;
 }
