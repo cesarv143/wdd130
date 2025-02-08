@@ -292,6 +292,26 @@ iframe {
   margin-top: 10px;
 }
 
+fieldset {
+  border: none;
+  margin: 10px 0;
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.radio-group input {
+  margin-right: 5px;
+}
+
+.checkbox-group {
+  margin-top: 10px;
+}
+
 .contact-form input, .contact-form textarea {
   width: 100%;
   padding: 10px;
