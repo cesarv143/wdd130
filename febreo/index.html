@@ -83,6 +83,7 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
+            overflow: hidden;
         }
         .heart {
             position: absolute;
@@ -103,6 +104,15 @@
                 opacity: 0;
             }
         }
+
+        @keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(200deg);
+    }
+        }        
     </style>
 </head>
 <body>
