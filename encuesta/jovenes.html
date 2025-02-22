@@ -185,11 +185,9 @@
     </style>
 </head>
 <body>
-    
-    
     <!-- Contenedor del título -->
     <div class="titulo-container">
-        <h1>Formulario de Asistencia</h1>
+        <h1>Hombres Jóvenes</h1>
     </div>
 
     <!-- Formulario -->
@@ -322,42 +320,42 @@
 
         // Función para enviar los datos a la segunda página
         function enviarDatos() {
-    // Obtener los datos del formulario
-    const barrioRama = document.getElementById("barrio-rama").value;
-    const miembroPresidencia = document.getElementById("miembro-presidencia").value;
-    const nombresJovenes = Array.from(document.querySelectorAll(".nombre-joven")).map(input => input.value);
-    const nombresNoAsistieron = Array.from(document.querySelectorAll(".no-asistio")).map(input => input.value);
-    const oracionInicio = document.querySelector('input[name="oracion-inicio"]:checked')?.value || "No especificado";
-    const oracionFin = document.querySelector('input[name="oracion-fin"]:checked')?.value || "No especificado";
-    const lema = document.querySelector('input[name="lema"]:checked')?.value || "No especificado";
-    const guioClase = document.querySelector('input[name="guio-clase"]:checked')?.value || "No especificado";
-    const observaciones = document.getElementById("observaciones").value;
+            // Obtener los datos del formulario
+            const barrioRama = document.getElementById("barrio-rama").value;
+            const miembroPresidencia = document.getElementById("miembro-presidencia").value;
+            const nombresJovenes = Array.from(document.querySelectorAll(".nombre-joven")).map(input => input.value);
+            const nombresNoAsistieron = Array.from(document.querySelectorAll(".no-asistio")).map(input => input.value);
+            const oracionInicio = document.querySelector('input[name="oracion-inicio"]:checked')?.value || "No especificado";
+            const oracionFin = document.querySelector('input[name="oracion-fin"]:checked')?.value || "No especificado";
+            const lema = document.querySelector('input[name="lema"]:checked')?.value || "No especificado";
+            const guioClase = document.querySelector('input[name="guio-clase"]:checked')?.value || "No especificado";
+            const observaciones = document.getElementById("observaciones").value;
 
-    // Crear el objeto con los datos del formulario
-    const nuevoFormulario = {
-        barrioRama,
-        miembroPresidencia,
-        nombresJovenes,
-        nombresNoAsistieron,
-        oracionInicio,
-        oracionFin,
-        lema,
-        guioClase,
-        observaciones,
-    };
+            // Crear el objeto con los datos del formulario
+            const nuevoFormulario = {
+                barrioRama,
+                miembroPresidencia,
+                nombresJovenes,
+                nombresNoAsistieron,
+                oracionInicio,
+                oracionFin,
+                lema,
+                guioClase,
+                observaciones,
+            };
 
-    // Obtener los formularios existentes de localStorage
-    let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+            // Obtener los formularios existentes de localStorage
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
 
-    // Agregar el nuevo formulario al arreglo
-    formularios.push(nuevoFormulario);
+            // Agregar el nuevo formulario al arreglo
+            formularios.push(nuevoFormulario);
 
-    // Guardar el arreglo actualizado en localStorage
-    localStorage.setItem("formularios", JSON.stringify(formularios));
+            // Guardar el arreglo actualizado en localStorage
+            localStorage.setItem("formularios", JSON.stringify(formularios));
 
-    // Redirigir a la segunda página
-    window.location.href = "gracias de solicitud.html";
-}
+            // Redirigir a la segunda página
+            window.location.href = "gracias de solicitud.html";
+        }
     </script>
 </body>
 </html>

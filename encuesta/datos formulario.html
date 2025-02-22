@@ -9,130 +9,108 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
         }
-        h2 {
+        h1 {
             text-align: center;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: white;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
-            text-align: center;
+            text-align: left;
         }
         th {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
         }
         .delete-btn {
-            background-color: red;
+            background-color: #ff4d4d;
             color: white;
             border: none;
             padding: 5px 10px;
             cursor: pointer;
         }
-        .delete-btn:hover {
-            background-color: darkred;
-        }
-        .buttons {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .buttons button {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .export-btn {
-            background-color: blue;
-            color: white;
-        }
-        .filter-btn {
-            background-color: orange;
-            color: white;
-        }
     </style>
 </head>
 <body>
 
-    <h2>Lista de Formularios Guardados</h2>
+    <h1>Registros de Formularios</h1>
 
+    <!-- Filtro por Fecha -->
     <label for="filtro-fecha">Filtrar por Fecha:</label>
     <input type="date" id="filtro-fecha">
-    <button class="filter-btn" onclick="filtrarPorFecha()">Filtrar</button>
+    <button onclick="filtrarPorFecha()">Filtrar</button>
+    <button onclick="cargarFormularios()">Restablecer</button>
 
-    <table>
+    <!-- Botones para exportar -->
+    <button onclick="exportarExcel()">Descargar Todos</button>
+    <button onclick="exportarFormularioIndividual()">Descargar Formulario Seleccionado</button>
+
+    <table border="1">
         <thead>
             <tr>
                 <th>Fecha</th>
                 <th>Barrio/Rama</th>
                 <th>Miembro de Presidencia</th>
                 <th>Jóvenes Asistieron</th>
-                <th>Jóvenes No Asistieron</th>
-                <th>Oración de Inicio</th>
-                <th>Oración de Fin</th>
-                <th>Lema</th>
-                <th>Guiador de Clase</th>
+                <th>Jóvenes NO Asistieron</th>
+                <th>¿Comenzaron con oración?</th>
+                <th>¿Terminaron con oración?</th>
+                <th>¿Citaron el lema?</th>
+                <th>¿Un joven guió la clase?</th>
                 <th>Observaciones</th>
-                <th>Acciones</th>
+                <th>Acción</th>
             </tr>
         </thead>
-        <tbody id="cuerpo-tabla">
-            <!-- Aquí se llenarán los datos dinámicamente -->
-        </tbody>
+        <tbody id="cuerpo-tabla"></tbody>
     </table>
-
-    <div class="buttons">
-        <button class="export-btn" onclick="exportarExcel()">Exportar a Excel</button>
-        <button onclick="window.location.href='jovenes.html'">Regresar</button>
-    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", cargarFormularios);
 
+        // Cargar formularios desde localStorage
         function cargarFormularios() {
             let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
             mostrarEnTabla(formularios);
         }
 
+        // Mostrar datos en la tabla
         function mostrarEnTabla(datos) {
             const tabla = document.getElementById("cuerpo-tabla");
             tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
 
-            if (datos.length === 0) {
-                tabla.innerHTML = `<tr><td colspan="11" style="text-align:center;">No hay formularios disponibles</td></tr>`;
-                return;
-            }
-
-            const filas = datos.map((formulario, index) => `
-                <tr>
-                    <td>${formulario["Fecha"] || "No especificado"}</td>
-                    <td>${formulario["Barrio/Rama"] || "No especificado"}</td>
-                    <td>${formulario["Miembro de Presidencia"] || "No especificado"}</td>
-                    <td>${formulario["Jóvenes Asistieron"] || "No especificado"}</td>
-                    <td>${formulario["Jóvenes No Asistieron"] || "No especificado"}</td>
-                    <td>${formulario["Oración de Inicio"] || "No especificado"}</td>
-                    <td>${formulario["Oración de Fin"] || "No especificado"}</td>
-                    <td>${formulario["Lema"] || "No especificado"}</td>
-                    <td>${formulario["Guiador de Clase"] || "No especificado"}</td>
-                    <td>${formulario["Observaciones"] || "No especificado"}</td>
-                    <td><button class="delete-btn" onclick="eliminarFormulario(${index})">Eliminar</button></td>
-                </tr>
-            `).join("");
-
-            tabla.innerHTML = filas;
+            datos.forEach((formulario, index) => {
+                let fila = `<tr>
+                    <td>${formulario.fecha || "No especificado"}</td>
+                    <td>${formulario.barrioRama}</td>
+                    <td>${formulario.miembroPresidencia}</td>
+                    <td>${formulario.nombresJovenes.join(", ")}</td>
+                    <td>${formulario.nombresNoAsistieron.join(", ")}</td>
+                    <td>${formulario.oracionInicio}</td>
+                    <td>${formulario.oracionFin}</td>
+                    <td>${formulario.lema}</td>
+                    <td>${formulario.guioClase}</td>
+                    <td>${formulario.observaciones}</td>
+                    <td>
+                        <button class="delete-btn" onclick="eliminarFormulario(${index})">Eliminar</button>
+                        <button onclick="exportarFormularioIndividual(${index})">Descargar</button>
+                    </td>
+                </tr>`;
+                tabla.innerHTML += fila;
+            });
         }
 
+        // Filtrar formularios por fecha
         function filtrarPorFecha() {
-            let fechaFiltro = document.getElementById("filtro-fecha").value;
+            let fechaFiltro = document.getElementById("filtro-fecha").value.trim();
             let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
 
             if (!fechaFiltro) {
@@ -140,7 +118,10 @@
                 return;
             }
 
-            let filtrados = formularios.filter(form => form["Fecha"] === fechaFiltro);
+            let filtrados = formularios.filter(form => {
+                let fechaFormateada = new Date(form.fecha).toISOString().split("T")[0];
+                return fechaFormateada === fechaFiltro;
+            });
 
             if (filtrados.length === 0) {
                 alert("No hay formularios registrados para esta fecha.");
@@ -149,14 +130,9 @@
             mostrarEnTabla(filtrados);
         }
 
+        // Eliminar un formulario
         function eliminarFormulario(index) {
             let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
-
-            if (index < 0 || index >= formularios.length) {
-                alert("Error: No se puede eliminar este formulario.");
-                return;
-            }
-
             if (confirm("¿Seguro que quieres eliminar este formulario?")) {
                 formularios.splice(index, 1);
                 localStorage.setItem("formularios", JSON.stringify(formularios));
@@ -164,6 +140,7 @@
             }
         }
 
+        // Exportar todos los formularios a Excel
         function exportarExcel() {
             let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
 
@@ -172,18 +149,145 @@
                 return;
             }
 
-            // Crear una hoja de cálculo con SheetJS
-            const ws = XLSX.utils.json_to_sheet(formularios);
+            // Crear un arreglo de datos para el archivo Excel
+            const datosExcel = [];
 
-            // Crear un libro de trabajo
+            // Encabezados de columna
+            const encabezados = [
+                "Fecha",
+                "Barrio/Rama",
+                "Miembro de Presidencia",
+                "Jóvenes Asistieron",
+                "Jóvenes NO Asistieron",
+                "¿Comenzaron con oración?",
+                "¿Terminaron con oración?",
+                "¿Citaron el lema?",
+                "¿Un joven guió la clase?",
+                "Observaciones"
+            ];
+            datosExcel.push(encabezados);
+
+            // Agregar los datos de cada formulario como filas
+            formularios.forEach(formulario => {
+                const fila = [
+                    formulario.fecha || "No especificado",
+                    formulario.barrioRama,
+                    formulario.miembroPresidencia,
+                    formulario.nombresJovenes.join(", "),
+                    formulario.nombresNoAsistieron.join(", "),
+                    formulario.oracionInicio,
+                    formulario.oracionFin,
+                    formulario.lema,
+                    formulario.guioClase,
+                    formulario.observaciones
+                ];
+                datosExcel.push(fila);
+            });
+
+            // Crear una hoja de cálculo
+            const ws = XLSX.utils.aoa_to_sheet(datosExcel);
+
+            // Aplicar estilo a los encabezados
+            const encabezadosRange = XLSX.utils.decode_range(ws["!ref"]);
+            for (let C = encabezadosRange.s.c; C <= encabezadosRange.e.c; ++C) {
+                const celdaEncabezado = XLSX.utils.encode_cell({ r: 0, c: C });
+                if (!ws[celdaEncabezado]) continue;
+
+                ws[celdaEncabezado].s = {
+                    fill: { fgColor: { rgb: "FFFF00" } }, // Fondo amarillo
+                    font: { bold: true, color: { rgb: "000000" } }, // Texto en negrita
+                    alignment: { horizontal: "center" } // Texto centrado
+                };
+            }
+
+            // Ajustar el ancho de las columnas al contenido
+            ws["!cols"] = encabezados.map(() => ({ width: 20 }));
+
+            // Crear un libro de Excel
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Registros");
+            XLSX.utils.book_append_sheet(wb, ws, "Formularios");
 
-            // Obtener la fecha actual para el nombre del archivo
-            const fechaDescarga = new Date().toISOString().slice(0, 10);
-            const nombreArchivo = `Datos_Formularios_${fechaDescarga}.xlsx`;
+            // Exportar el archivo
+            const fechaDescarga = new Date().toISOString().split("T")[0];
+            const nombreArchivo = `Formularios_${fechaDescarga}.xlsx`;
+            XLSX.writeFile(wb, nombreArchivo);
+        }
 
-            // Guardar el archivo
+        // Exportar un formulario individual a Excel
+        function exportarFormularioIndividual(index) {
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+
+            if (formularios.length === 0) {
+                alert("No hay datos para exportar.");
+                return;
+            }
+
+            if (index === undefined) {
+                alert("Selecciona un formulario para descargar.");
+                return;
+            }
+
+            const formulario = formularios[index];
+
+            // Crear un arreglo de datos para el archivo Excel
+            const datosExcel = [];
+
+            // Encabezados de columna
+            const encabezados = [
+                "Fecha",
+                "Barrio/Rama",
+                "Miembro de Presidencia",
+                "Jóvenes Asistieron",
+                "Jóvenes NO Asistieron",
+                "¿Comenzaron con oración?",
+                "¿Terminaron con oración?",
+                "¿Citaron el lema?",
+                "¿Un joven guió la clase?",
+                "Observaciones"
+            ];
+            datosExcel.push(encabezados);
+
+            // Agregar los datos del formulario como fila
+            const fila = [
+                formulario.fecha || "No especificado",
+                formulario.barrioRama,
+                formulario.miembroPresidencia,
+                formulario.nombresJovenes.join(", "),
+                formulario.nombresNoAsistieron.join(", "),
+                formulario.oracionInicio,
+                formulario.oracionFin,
+                formulario.lema,
+                formulario.guioClase,
+                formulario.observaciones
+            ];
+            datosExcel.push(fila);
+
+            // Crear una hoja de cálculo
+            const ws = XLSX.utils.aoa_to_sheet(datosExcel);
+
+            // Aplicar estilo a los encabezados
+            const encabezadosRange = XLSX.utils.decode_range(ws["!ref"]);
+            for (let C = encabezadosRange.s.c; C <= encabezadosRange.e.c; ++C) {
+                const celdaEncabezado = XLSX.utils.encode_cell({ r: 0, c: C });
+                if (!ws[celdaEncabezado]) continue;
+
+                ws[celdaEncabezado].s = {
+                    fill: { fgColor: { rgb: "FFFF00" } }, // Fondo amarillo
+                    font: { bold: true, color: { rgb: "000000" } }, // Texto en negrita
+                    alignment: { horizontal: "center" } // Texto centrado
+                };
+            }
+
+            // Ajustar el ancho de las columnas al contenido
+            ws["!cols"] = encabezados.map(() => ({ width: 20 }));
+
+            // Crear un libro de Excel
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Formulario");
+
+            // Exportar el archivo
+            const fechaDescarga = new Date().toISOString().split("T")[0];
+            const nombreArchivo = `Formulario_${index + 1}_${fechaDescarga}.xlsx`;
             XLSX.writeFile(wb, nombreArchivo);
         }
     </script>
