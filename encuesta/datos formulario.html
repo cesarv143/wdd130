@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos del Formulario</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .miembro-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .miembro-container h2 {
+            color: #3498db;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .miembro-container p {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #495057;
+        }
+
+        .miembro-container p strong {
+            color: #2c3e50;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Datos del Formulario</h1>
+    <div id="datos-container">
+        <!-- Los datos se mostrarán aquí -->
+    </div>
+    <button onclick="exportarAExcel()">Exportar a Excel</button>
+    <button onclick="window.location.href = 'index.html';">Inicio</button>
+
+    <script>
+        // Recuperar los formularios de localStorage
+const formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+
+// Mostrar los formularios en la página
+const datosContainer = document.getElementById("datos-container");
+if (formularios.length > 0) {
+    formularios.forEach((formulario, index) => {
+        // Crear un contenedor para cada formulario
+        const miembroContainer = document.createElement("div");
+        miembroContainer.className = "miembro-container";
+
+        // Título con el nombre del miembro de la presidencia
+        const tituloMiembro = document.createElement("h2");
+        tituloMiembro.textContent = `Formulario ${index + 1} - Enviado por: ${formulario.miembroPresidencia}`;
+        miembroContainer.appendChild(tituloMiembro);
+
+        // Mostrar los datos del formulario
+        miembroContainer.innerHTML += `
+            <p><strong>Barrio/Rama:</strong> ${formulario.barrioRama}</p>
+            <p><strong>Jóvenes Asistieron:</strong> ${formulario.nombresJovenes.join(", ")}</p>
+            <p><strong>Jóvenes NO Asistieron:</strong> ${formulario.nombresNoAsistieron.join(", ")}</p>
+            <p><strong>¿Comenzaron con oración?:</strong> ${formulario.oracionInicio}</p>
+            <p><strong>¿Terminaron con oración?:</strong> ${formulario.oracionFin}</p>
+            <p><strong>¿Citaron el lema de Hombres Jóvenes?:</strong> ${formulario.lema}</p>
+            <p><strong>¿Un joven guió la clase?:</strong> ${formulario.guioClase}</p>
+            <p><strong>Observaciones:</strong> ${formulario.observaciones}</p>
+        `;
+
+        // Agregar el contenedor a la página
+        datosContainer.appendChild(miembroContainer);
+    });
+} else {
+    datosContainer.innerHTML = "<p>No hay datos disponibles.</p>";
+}
+
+        // Función para exportar los datos a Excel
+        function exportarAExcel() {
+    if (formularios.length === 0) return;
+
+    // Crear un arreglo de datos para el archivo Excel
+    const datosExcel = [];
+
+    formularios.forEach((formulario, index) => {
+        datosExcel.push(
+            [`Formulario ${index + 1} - Enviado por: ${formulario.miembroPresidencia}`],
+            ["Barrio/Rama", formulario.barrioRama],
+            ["Jóvenes Asistieron", ...formulario.nombresJovenes],
+            ["Jóvenes NO Asistieron", ...formulario.nombresNoAsistieron],
+            ["¿Comenzaron con oración?", formulario.oracionInicio],
+            ["¿Terminaron con oración?", formulario.oracionFin],
+            ["¿Citaron el lema de Hombres Jóvenes?", formulario.lema],
+            ["¿Un joven guió la clase?", formulario.guioClase],
+            ["Observaciones", formulario.observaciones],
+            [] // Espacio entre formularios
+        );
+    });
+
+    // Crear una hoja de cálculo
+    const hoja = XLSX.utils.aoa_to_sheet(datosExcel);
+
+    // Crear un libro de Excel
+    const libro = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(libro, hoja, "Formularios");
+
+    // Exportar el archivo
+    XLSX.writeFile(libro, "formularios.xlsx");
+}
+    </script>
+</body>
+</html>

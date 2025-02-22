@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Asistencia</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #495057;
+        }
+
+        textarea {
+            resize: vertical; /* Permite redimensionar verticalmente */
+            min-height: 100px; /* Altura mínima */
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        /* Estilos para el contenedor de preguntas */
+        .preguntas-container {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .preguntas-container h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .pregunta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pregunta-item label {
+            font-weight: 600;
+            color: #495057;
+            margin-right: 20px;
+            flex: 1;
+        }
+
+        .opciones {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .opciones span {
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+            color: #6c757d;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Estilos para los campos dinámicos */
+        #lista-jovenes,
+        #lista-no-asistieron {
+            margin-bottom: 20px;
+        }
+
+        #lista-jovenes div,
+        #lista-no-asistieron div {
+            margin-bottom: 15px;
+        }
+
+        #lista-jovenes button,
+        #lista-no-asistieron button {
+            background-color: #6c757d;
+            margin-left: 10px;
+        }
+
+        #lista-jovenes button:hover,
+        #lista-no-asistieron button:hover {
+            background-color: #5a6268;
+        }
+
+        /* Estilos para el botón de enviar */
+        #btn-enviar {
+            background-color: #27ae60;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #btn-enviar:hover {
+            background-color: #219653;
+        }
+
+        /* Estilos para el contenedor del título */
+        .titulo-container {
+            background-color: #3498db;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo-container h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor del título -->
+    <div class="titulo-container">
+        <h1>Formulario de Asistencia</h1>
+    </div>
+
+    <!-- Formulario -->
+    <form id="formulario-asistencia">
+        <!-- Campo para el nombre del barrio/rama -->
+        <label for="barrio-rama">Nombre del Barrio/Rama:</label>
+        <input type="text" id="barrio-rama" name="barrio-rama" required>
+
+        <!-- Campo para el nombre del miembro de la presidencia -->
+        <label for="miembro-presidencia">Nombre del Miembro de la Presidencia:</label>
+        <input type="text" id="miembro-presidencia" name="miembro-presidencia" required>
+
+        <!-- Lista de jóvenes -->
+        <div id="lista-jovenes">
+            <label>Nombre del Joven:</label>
+            <input type="text" class="nombre-joven" required>
+            <button type="button" onclick="agregarJoven()">Agregar otro joven</button>
+        </div>
+
+        <!-- Lista de jóvenes que no asistieron -->
+        <div id="lista-no-asistieron">
+            <label>Nombre del Joven NO asistió:</label>
+            <input type="text" class="no-asistio">
+            <button type="button" onclick="agregarNoAsistio()">Agregar otro joven que no asistió</button>
+        </div>
+
+        <!-- Sección de preguntas -->
+        <div class="preguntas-container">
+            <h2>¿Cumplieron con los pasos?</h2>
+
+            <!-- Pregunta 1 -->
+            <div class="pregunta-item">
+                <label>¿Comenzaron con oración?</label>
+                <div class="opciones">
+                    <div class="radio-group">
+                        <input type="radio" id="oracion-inicio-si" name="oracion-inicio" value="si">
+                        <label for="oracion-inicio-si">Sí</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="oracion-inicio-no" name="oracion-inicio" value="no">
+                        <label for="oracion-inicio-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="pregunta-item">
+                <label>¿Terminaron con oración?</label>
+                <div class="opciones">
+                    <div class="radio-group">
+                        <input type="radio" id="oracion-fin-si" name="oracion-fin" value="si">
+                        <label for="oracion-fin-si">Sí</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="oracion-fin-no" name="oracion-fin" value="no">
+                        <label for="oracion-fin-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="pregunta-item">
+                <label>¿Citaron el lema de Hombres Jóvenes?</label>
+                <div class="opciones">
+                    <div class="radio-group">
+                        <input type="radio" id="lema-si" name="lema" value="si">
+                        <label for="lema-si">Sí</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="lema-no" name="lema" value="no">
+                        <label for="lema-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="pregunta-item">
+                <label>¿Un joven guió la clase?</label>
+                <div class="opciones">
+                    <div class="radio-group">
+                        <input type="radio" id="guio-clase-si" name="guio-clase" value="si">
+                        <label for="guio-clase-si">Sí</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="guio-clase-no" name="guio-clase" value="no">
+                        <label for="guio-clase-no">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campo de observaciones -->
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" name="observaciones" placeholder="Escribe aquí cualquier observación adicional..."></textarea>
+
+        <!-- Botón para enviar los datos -->
+        <button type="button" id="btn-enviar" onclick="enviarDatos()">Enviar</button>
+    </form>
+
+    <script>
+        // Función para agregar más campos de jóvenes
+        function agregarJoven() {
+            const listaJovenes = document.getElementById("lista-jovenes");
+            const nuevoCampo = document.createElement("div");
+            nuevoCampo.innerHTML = `
+                <label>Nombre del Joven:</label>
+                <input type="text" class="nombre-joven" required>
+                <button type="button" onclick="eliminarCampo(this)">Eliminar</button>
+            `;
+            listaJovenes.appendChild(nuevoCampo);
+        }
+
+        // Función para agregar más campos de jóvenes que no asistieron
+        function agregarNoAsistio() {
+            const listaNoAsistieron = document.getElementById("lista-no-asistieron");
+            const nuevoCampo = document.createElement("div");
+            nuevoCampo.innerHTML = `
+                <label>Nombre del Joven NO asistió:</label>
+                <input type="text" class="no-asistio">
+                <button type="button" onclick="eliminarCampo(this)">Eliminar</button>
+            `;
+            listaNoAsistieron.appendChild(nuevoCampo);
+        }
+
+        // Función para eliminar campos
+        function eliminarCampo(boton) {
+            const campo = boton.parentElement;
+            campo.remove();
+        }
+
+        // Función para enviar los datos a la segunda página
+        function enviarDatos() {
+    // Obtener los datos del formulario
+    const barrioRama = document.getElementById("barrio-rama").value;
+    const miembroPresidencia = document.getElementById("miembro-presidencia").value;
+    const nombresJovenes = Array.from(document.querySelectorAll(".nombre-joven")).map(input => input.value);
+    const nombresNoAsistieron = Array.from(document.querySelectorAll(".no-asistio")).map(input => input.value);
+    const oracionInicio = document.querySelector('input[name="oracion-inicio"]:checked')?.value || "No especificado";
+    const oracionFin = document.querySelector('input[name="oracion-fin"]:checked')?.value || "No especificado";
+    const lema = document.querySelector('input[name="lema"]:checked')?.value || "No especificado";
+    const guioClase = document.querySelector('input[name="guio-clase"]:checked')?.value || "No especificado";
+    const observaciones = document.getElementById("observaciones").value;
+
+    // Crear el objeto con los datos del formulario
+    const nuevoFormulario = {
+        barrioRama,
+        miembroPresidencia,
+        nombresJovenes,
+        nombresNoAsistieron,
+        oracionInicio,
+        oracionFin,
+        lema,
+        guioClase,
+        observaciones,
+    };
+
+    // Obtener los formularios existentes de localStorage
+    let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+
+    // Agregar el nuevo formulario al arreglo
+    formularios.push(nuevoFormulario);
+
+    // Guardar el arreglo actualizado en localStorage
+    localStorage.setItem("formularios", JSON.stringify(formularios));
+
+    // Redirigir a la segunda página
+    window.location.href = "gracias de solicitud.html";
+}
+    </script>
+</body>
+</html>
