@@ -3,151 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datos del Formulario</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <title>Datos de Formularios</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* Estilos generales */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e9ecef;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            background-color: #f4f4f4;
         }
-
-        h1 {
-            color: #2c3e50;
-            font-size: 2rem;
-            margin-bottom: 20px;
+        h2 {
             text-align: center;
         }
-
-        .miembro-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        table {
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
         }
-
-        .miembro-container h2 {
-            color: #3498db;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
-
-        .miembro-container p {
-            margin: 10px 0;
-            font-size: 1rem;
-            color: #495057;
+        th {
+            background-color: #4CAF50;
+            color: white;
         }
-
-        .miembro-container p strong {
-            color: #2c3e50;
-        }
-
-        button {
-            background-color: #3498db;
-            color: #fff;
+        .delete-btn {
+            background-color: red;
+            color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 5px 10px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
+        }
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+        .buttons {
+            text-align: center;
             margin-top: 20px;
         }
-
-        button:hover {
-            background-color: #2980b9;
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .export-btn {
+            background-color: blue;
+            color: white;
+        }
+        .filter-btn {
+            background-color: orange;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>Datos del Formulario</h1>
-    <div id="datos-container">
-        <!-- Los datos se mostrarán aquí -->
+
+    <h2>Lista de Formularios Guardados</h2>
+
+    <label for="filtro-fecha">Filtrar por Fecha:</label>
+    <input type="date" id="filtro-fecha">
+    <button class="filter-btn" onclick="filtrarPorFecha()">Filtrar</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Barrio/Rama</th>
+                <th>Miembro de Presidencia</th>
+                <th>Jóvenes Asistieron</th>
+                <th>Jóvenes No Asistieron</th>
+                <th>Oración de Inicio</th>
+                <th>Oración de Fin</th>
+                <th>Lema</th>
+                <th>Guiador de Clase</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo-tabla">
+            <!-- Aquí se llenarán los datos dinámicamente -->
+        </tbody>
+    </table>
+
+    <div class="buttons">
+        <button class="export-btn" onclick="exportarExcel()">Exportar a Excel</button>
+        <button onclick="window.location.href='jovenes.html'">Regresar</button>
     </div>
-    <button onclick="exportarAExcel()">Exportar a Excel</button>
-    <button onclick="window.location.href = 'index.html';">Inicio</button>
 
     <script>
-        // Recuperar los formularios de localStorage
-const formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+        document.addEventListener("DOMContentLoaded", cargarFormularios);
 
-// Mostrar los formularios en la página
-const datosContainer = document.getElementById("datos-container");
-if (formularios.length > 0) {
-    formularios.forEach((formulario, index) => {
-        // Crear un contenedor para cada formulario
-        const miembroContainer = document.createElement("div");
-        miembroContainer.className = "miembro-container";
+        function cargarFormularios() {
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+            mostrarEnTabla(formularios);
+        }
 
-        // Título con el nombre del miembro de la presidencia
-        const tituloMiembro = document.createElement("h2");
-        tituloMiembro.textContent = `Formulario ${index + 1} - Enviado por: ${formulario.miembroPresidencia}`;
-        miembroContainer.appendChild(tituloMiembro);
+        function mostrarEnTabla(datos) {
+            const tabla = document.getElementById("cuerpo-tabla");
+            tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
 
-        // Mostrar los datos del formulario
-        miembroContainer.innerHTML += `
-            <p><strong>Barrio/Rama:</strong> ${formulario.barrioRama}</p>
-            <p><strong>Jóvenes Asistieron:</strong> ${formulario.nombresJovenes.join(", ")}</p>
-            <p><strong>Jóvenes NO Asistieron:</strong> ${formulario.nombresNoAsistieron.join(", ")}</p>
-            <p><strong>¿Comenzaron con oración?:</strong> ${formulario.oracionInicio}</p>
-            <p><strong>¿Terminaron con oración?:</strong> ${formulario.oracionFin}</p>
-            <p><strong>¿Citaron el lema de Hombres Jóvenes?:</strong> ${formulario.lema}</p>
-            <p><strong>¿Un joven guió la clase?:</strong> ${formulario.guioClase}</p>
-            <p><strong>Observaciones:</strong> ${formulario.observaciones}</p>
-        `;
+            if (datos.length === 0) {
+                tabla.innerHTML = `<tr><td colspan="11" style="text-align:center;">No hay formularios disponibles</td></tr>`;
+                return;
+            }
 
-        // Agregar el contenedor a la página
-        datosContainer.appendChild(miembroContainer);
-    });
-} else {
-    datosContainer.innerHTML = "<p>No hay datos disponibles.</p>";
-}
+            const filas = datos.map((formulario, index) => `
+                <tr>
+                    <td>${formulario["Fecha"] || "No especificado"}</td>
+                    <td>${formulario["Barrio/Rama"] || "No especificado"}</td>
+                    <td>${formulario["Miembro de Presidencia"] || "No especificado"}</td>
+                    <td>${formulario["Jóvenes Asistieron"] || "No especificado"}</td>
+                    <td>${formulario["Jóvenes No Asistieron"] || "No especificado"}</td>
+                    <td>${formulario["Oración de Inicio"] || "No especificado"}</td>
+                    <td>${formulario["Oración de Fin"] || "No especificado"}</td>
+                    <td>${formulario["Lema"] || "No especificado"}</td>
+                    <td>${formulario["Guiador de Clase"] || "No especificado"}</td>
+                    <td>${formulario["Observaciones"] || "No especificado"}</td>
+                    <td><button class="delete-btn" onclick="eliminarFormulario(${index})">Eliminar</button></td>
+                </tr>
+            `).join("");
 
-        // Función para exportar los datos a Excel
-        function exportarAExcel() {
-    if (formularios.length === 0) return;
+            tabla.innerHTML = filas;
+        }
 
-    // Crear un arreglo de datos para el archivo Excel
-    const datosExcel = [];
+        function filtrarPorFecha() {
+            let fechaFiltro = document.getElementById("filtro-fecha").value;
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
 
-    formularios.forEach((formulario, index) => {
-        datosExcel.push(
-            [`Formulario ${index + 1} - Enviado por: ${formulario.miembroPresidencia}`],
-            ["Barrio/Rama", formulario.barrioRama],
-            ["Jóvenes Asistieron", ...formulario.nombresJovenes],
-            ["Jóvenes NO Asistieron", ...formulario.nombresNoAsistieron],
-            ["¿Comenzaron con oración?", formulario.oracionInicio],
-            ["¿Terminaron con oración?", formulario.oracionFin],
-            ["¿Citaron el lema de Hombres Jóvenes?", formulario.lema],
-            ["¿Un joven guió la clase?", formulario.guioClase],
-            ["Observaciones", formulario.observaciones],
-            [] // Espacio entre formularios
-        );
-    });
+            if (!fechaFiltro) {
+                alert("Por favor, selecciona una fecha para filtrar.");
+                return;
+            }
 
-    // Crear una hoja de cálculo
-    const hoja = XLSX.utils.aoa_to_sheet(datosExcel);
+            let filtrados = formularios.filter(form => form["Fecha"] === fechaFiltro);
 
-    // Crear un libro de Excel
-    const libro = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(libro, hoja, "Formularios");
+            if (filtrados.length === 0) {
+                alert("No hay formularios registrados para esta fecha.");
+            }
 
-    // Exportar el archivo
-    XLSX.writeFile(libro, "formularios.xlsx");
-}
+            mostrarEnTabla(filtrados);
+        }
+
+        function eliminarFormulario(index) {
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+
+            if (index < 0 || index >= formularios.length) {
+                alert("Error: No se puede eliminar este formulario.");
+                return;
+            }
+
+            if (confirm("¿Seguro que quieres eliminar este formulario?")) {
+                formularios.splice(index, 1);
+                localStorage.setItem("formularios", JSON.stringify(formularios));
+                cargarFormularios();
+            }
+        }
+
+        function exportarExcel() {
+            let formularios = JSON.parse(localStorage.getItem("formularios")) || [];
+
+            if (formularios.length === 0) {
+                alert("No hay datos para exportar.");
+                return;
+            }
+
+            // Crear una hoja de cálculo con SheetJS
+            const ws = XLSX.utils.json_to_sheet(formularios);
+
+            // Crear un libro de trabajo
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Registros");
+
+            // Obtener la fecha actual para el nombre del archivo
+            const fechaDescarga = new Date().toISOString().slice(0, 10);
+            const nombreArchivo = `Datos_Formularios_${fechaDescarga}.xlsx`;
+
+            // Guardar el archivo
+            XLSX.writeFile(wb, nombreArchivo);
+        }
     </script>
+
 </body>
 </html>
